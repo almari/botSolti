@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#export the needed ingredients first
+export HUBOT_IRC_SERVER=irc.freenode.net HUBOT_IRC_ROOMS="#guffgaf" HUBOT_IRC_NICK="abot" HUBOT_IRC_UNFLOOD="true"
+
+./bin/hubot -a irc
