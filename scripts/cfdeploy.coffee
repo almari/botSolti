@@ -46,7 +46,7 @@ module.exports = (robot) ->
         else
           msg.send body
 
-  robot.respond /(deploy) (.*)/i, (msg) ->
+  robot.respond /(Deploy) (.*)/i, (msg) ->
     #get the first command could be one of these {deploy, deploy:setup, deploy:cold}
     deploy_type = msg.match[1]
     str = (msg.match[2]).split(" ")
@@ -96,30 +96,11 @@ module.exports = (robot) ->
         console.log "Please check your parameters as in options: " + options
         console.log "Deployment of " + app+ "uncessfull :("
 
-  robot.respond /(dploy help) (.*)/i, (msg) ->
-
-    #console.log(params.app)
-    par = msg.match[2].split(" ")
-    #params = { app: par[0]}
-    params = "app=#{par[0]}&env=#{par[1]}&branch=#{par[2]}&dest=#{par[3]}"
-    link = "http://localhost:4567/deploy/?#{params}"
-    console.log(link)
-    msg
-      .http(link)
-      .get() (err, res, body) ->
-        if res.statusCode == 404
-          msg.send "Something went horribly wrong"
-        else
-          msg.send body
 
   robot.respond /(deploy) (.*)/i, (msg) ->
     #get the first command could be one of these {deploy, deploy:setup, deploy:cold}
     deploy_type = msg.match[1]
     str = (msg.match[2]).split(" ")
-    #console.log(str)
-    #console.log('*********************')
-    #str = "-a app -a apple -b main -e cloudy -d dog".split(" ")
-    #options = ["-a", "-b", "-d", "-e"]
 
     if str.length is 4
         #if everythings goes right... go left...
