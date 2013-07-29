@@ -15,38 +15,7 @@ module.exports = (robot) ->
     msg.send "hello, Welcome Buddy :D"
     #console.log(robot)
 
-#module.exports = (robot) ->
-  robot.respond /(bash) (.*)/i, (msg) ->
-    link = url.format
-      protocol: 'http'
-      host: 'localhost:4567'
-      pathname: util.format 'bash/%s', msg.match[2]
-
-    msg
-      .http(link)
-      .get() (err, res, body) ->
-        if res.statusCode == 404
-          msg.send "Something went horribly wrong"
-        else
-          msg.send body
-
-  robot.respond /(deploy help) (.*)/i, (msg) ->
-
-    #console.log(params.app)
-    par = msg.match[2].split(" ")
-    #params = { app: par[0]}
-    params = "app=#{par[0]}&env=#{par[1]}&branch=#{par[2]}&dest=#{par[3]}"
-    link = "http://localhost:4567/deploy/?#{params}"
-    console.log(link)
-    msg
-      .http(link)
-      .get() (err, res, body) ->
-        if res.statusCode == 404
-          msg.send "Something went horribly wrong"
-        else
-          msg.send body
-
-  robot.respond /(Deploy) (.*)/i, (msg) ->
+  robot.respond /(dploy) (.*)/i, (msg) ->
     #get the first command could be one of these {deploy, deploy:setup, deploy:cold}
     deploy_type = msg.match[1]
     str = (msg.match[2]).split(" ")
@@ -91,17 +60,14 @@ module.exports = (robot) ->
                 else
                   msg.send body
     #end of if
-
     else
         console.log "Please check your parameters as in options: " + options
-        console.log "Deployment of " + app+ "uncessfull :("
+        console.log "Deployment of " + app+ " unsuccessfull :("
 
 
   robot.respond /(deploy) (.*)/i, (msg) ->
-    #get the first command could be one of these {deploy, deploy:setup, deploy:cold}
-    deploy_type = msg.match[1]
-    str = (msg.match[2]).split(" ")
 
+    str = (msg.match[2]).split(" ")
     if str.length is 4
         #if everythings goes right... go left...
         console.log "Okey buddy, have some coffee now... its my turn to deploy #{str[0]} with #{str[1]} environment branched to:#{str[2]}"
@@ -117,6 +83,5 @@ module.exports = (robot) ->
                 else
                   msg.send body
     #end of if
-
     else
-        console.log "Sorry I can't take this " + str[0]+ " NO MORE !! :p"
+        console.log "Sorry I can take this " + str[0]+ " NO MORE !! :p"
