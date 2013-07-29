@@ -13,6 +13,9 @@ url = require 'url'
 module.exports = (robot) ->
   robot.respond /hi$/i, (msg) ->
     msg.send "hello, Welcome Buddy :D"
+
+  robot.respond /kata$/i, (msg) ->
+    msg.send "Aa hazur samson ma"
     #console.log(robot)
 
   robot.respond /(dploy) (.*)/i, (msg) ->
