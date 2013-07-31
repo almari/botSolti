@@ -76,11 +76,16 @@ module.exports = (robot) ->
   robot.respond /(deploy) (.*)/i, (msg) ->
 
     str = (msg.match[2]).split(" ")
-    if str.length is 3
+    if str.length >= 2
+
+        in_branch = str[2]
+        #check if no branch is provided... and use master as a default branch
+        in_branch = 'master' if typeof in_branch is "undefined" or not in_branch?
+
         #if everythings goes right... go left...
-        console.log "ok bo$$ !! have some coffee now... I need some time to deploy #{str[0]}"
+        console.log "ok bo$$ !! have some coffee now... I need some time to deploy #{str[0]}... from #{in_branch} branch "
         #now build the link with parameters
-        pars = "app=#{str[0]}&env=#{str[1]}&branch=#{str[2]}"
+        pars = "app=#{str[0]}&env=#{str[1]}&branch=#{in_branch}"
         link = "http://localhost:4567/deploy/?#{pars}"
         #console.log(link)
         msg
@@ -90,7 +95,7 @@ module.exports = (robot) ->
                   msg.send "Something went horribly wrong"
                 else
                   msg.send body
-                  msg.send "Congrats !! deployment just finished..."
+                  #msg.send "Congrats !! deployment just finished..."
     #end of if
     else
         console.log "Sorry I can take this....NO MORE !! :p"
