@@ -15,64 +15,41 @@ module.exports = (robot) ->
     msg.send "hello, Welcome Buddy :D"
 
   robot.respond /kata$/i, (msg) ->
-    msg.send "Aa hazur samson ma"
-    #console.log(robot)
 
-  robot.respond /(dploy) (.*)/i, (msg) ->
-    #get the first command could be one of these {deploy, deploy:setup, deploy:cold}
-    deploy_type = msg.match[1]
-    str = (msg.match[2]).split(" ")
-    #console.log(str)
-    #console.log('*********************')
-    #str = "-a app -a apple -b main -e cloudy -d dog".split(" ")
-    options = ["-a", "-b", "-d", "-e"]
-    i = 0
-    app = ''
-    while i < str.length
-      if str[i] is "-a" or str[i] is "-b" or str[i] is "-d" or str[i] is "-e"
-        switch str[i]
-          when "-a"
-            app = str[i + 1]
-          when "-e"
-            env = str[i + 1]
-          when "-b"
-            branch = str[i + 1]
-          when "-d"
-            dest = str[i + 1]
-          else
-            console.log "cf deploy... invalid_option: " + str[i]
+    whoamI=''
+    if process.env.HUBOT_AUTH_ADMIN?
+      admins = process.env.HUBOT_AUTH_ADMIN.split ','
+      console.log admins
+      #check if the user is admin
+      whoamI = msg.message.user.name.toString()
+      #console.log msg.message.user.id
+      #console.log  msg.message.user.roles
+      console.log whoamI
+      if  whoamI in admins
+        msg.send "Aa hazur samson ma"
       else
-        console.log "Hey, option :" + str[i] + " not avaliable, try again please :)"+"Sorry, your only Available options: " + options
-        break
-      i += 2
-    #end of while
+        msg.send "Sorry fella, ACCESS DENINED !!"
 
-    if app and env and branch and dest
-        #if everythings goes right... go left...
-        console.log "So you are going to deploy " +  app  + " in " + env + ":environment, branched to:" + branch + " over " + dest
+  robot.respond /hey, yo$/i, (msg) ->
 
-        #now build the link
-        params = "app=#{app}&env=#{env}&branch=#{branch}&dest=#{dest}"
-        link = "http://localhost:4567/deploy/?#{params}"
-        #onsole.log(link)
-        msg
-          .http(link)
-          .get() (err, res, body) ->
-                if res.statusCode == 404
-                  msg.send "Something went horribly wrong"
-                else
-                  msg.send body
-    #end of if
-    else
-        console.log "Please check your parameters as in options: " + options
-        console.log "Deployment of " + app+ " unsuccessfull :("
+    if process.env.HUBOT_AUTH_ADMIN?
+      admins = process.env.HUBOT_AUTH_ADMIN.split ','
+      console.log admins
 
+      #check if the user is admin
+      user = robot.brain.userForId(msg.message.user.id)
+      console.log user
+
+      if  user.id in admins
+        msg.send "welcome admin"
+      else
+        msg.send "Booo... so you think you are admin? :P"
 
   robot.respond /(how to deploy)(\?)?/i, (msg) ->
        console.log "Please kindly follow the syntax."
        console.log " [cf deploy app_name deployment_environment branch_to_deploy]"
 
-
+#----------------------------------------------------------------------------------------
   robot.respond /(deploy) (.*)/i, (msg) ->
 
     str = (msg.match[2]).split(" ")
@@ -83,7 +60,7 @@ module.exports = (robot) ->
         in_branch = 'master' if typeof in_branch is "undefined" or not in_branch?
 
         #if everythings goes right... go left...
-        console.log "ok bo$$ !! have some coffee now... I need some time to deploy #{str[0]}... from #{in_branch} branch "
+        msg.reply "ok bo$$ !! have some coffee now... I need some time to deploy #{str[0]}..."
         #now build the link with parameters
         pars = "app=#{str[0]}&env=#{str[1]}&branch=#{in_branch}"
         link = "http://localhost:4567/deploy/?#{pars}"
