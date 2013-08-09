@@ -21,13 +21,15 @@ url = require 'url'
 
 module.exports = (robot) ->
 
-  DOWN_LIMIT = robot.brain.get('MAX_DOWN_LiMITS') or 5
+
   # bot hear to links: {vimeo: [http://vimeo.com/70921986], youtube: [https://www.youtube.com/watch?video=VLeyCX3Em-c]}
   robot.respond /(download) (https?:\/\/www\.youtube\.com\/watch\?.+?|https?:\/\/vimeo\.com\/.+?|.*)(?:\s|$)/i, (msg) ->
 
     #first check the download limits
     counter = robot.brain.get('present_download_counter') or 0
-    console.log "Hey, I am have #{counter} downloads in queue"
+    DOWN_LIMIT = robot.brain.get('MAX_DOWN_LiMITS')
+    console.log "Hey, I have #{counter} downloads in queue...and my limit is #{DOWN_LIMIT}"
+
     if counter < DOWN_LIMIT
       url_parsed = url.parse(msg.match[2])
       query_parsed = querystring.parse(url_parsed.query)
@@ -86,3 +88,8 @@ module.exports = (robot) ->
       #    robot.brain.set 'totalBeers', beersHad+1
       # Or robot.brain.set totalBeers: beersHad+1
     msg.reply 'Hey, you hacked me (y)'
+
+  robot.respond /(flush all info)/i, (msg) ->
+    robot.brain.set present_download_counter: 0
+    robot.brain.set MAX_DOWN_LiMITS: 5
+    msg.reply 'all clear boss'
