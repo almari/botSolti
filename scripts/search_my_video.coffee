@@ -32,7 +32,7 @@ module.exports = (robot) ->
         else
           msg.send body
 
-  robot.respond /(dump tree|dt)/i, (msg) ->
+  robot.respond /(dump samson video tree|dst)/i, (msg) ->
     msg
       .http("http://localhost:4567/dump/videos/")
       .get() (err, res, body ) ->
