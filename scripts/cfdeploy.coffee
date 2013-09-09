@@ -10,6 +10,16 @@
 util = require 'util'
 url = require 'url'
 
+#check if user is a deployer or not ?
+isDeployer = (a) ->
+  return false  unless a?
+  i = 0
+
+  while i < a.length
+    return true  if a[i] is "deployee"
+    i++
+  false
+
 module.exports = (robot) ->
   robot.respond /hi$/i, (msg) ->
     msg.send "hello, Welcome Buddy :D"
@@ -56,11 +66,15 @@ module.exports = (robot) ->
       console.log admins
 
       user = robot.brain.userForId(msg.message.user.id)
-      console.log user
+      console.log user.roles
 
+      deployers = ['deployee','deployers']
+      msg.reply "Ok, you are #{user.roles}... ok deploying..."
       #if user is an admin ... give him deploy access...:)
-      if user.id in admins
-       # msg.reply "So, you wanna deploy...ok ROGER THAT :D"
+
+
+      if isDeployer(user.roles)  or user.id in admins
+        msg.reply "So, you wanna deploy...ok ROGER THAT :D"
         str = (msg.match[2]).split(" ")
         if str.length >= 2
 
@@ -70,6 +84,7 @@ module.exports = (robot) ->
 
             #if everythings goes right... go left...
             msg.reply "ok bo$$ !! have some coffee now... I need some time to deploy #{str[0]}..."
+
             #now build the link with parameters
             pars = "app=#{str[0]}&env=#{str[1]}&branch=#{in_branch}"
             link = "http://localhost:4567/deploy/?#{pars}"
