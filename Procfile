@@ -1,1 +1,1 @@
-web: bin/hubot -a irc -n abot
+app: bin/hubot -a irc -n geni
