@@ -26,7 +26,8 @@
   "dependencies": {
     "hubot":         ">= 2.6.0 < 3.0.0",
     "hubot-scripts": ">= 2.5.0 < 3.0.0",
-    "hubot-irc": "git://github.com/nandub/hubot-irc.git"
+    "hubot-irc": "git://github.com/nandub/hubot-irc.git",
+    "cleverbot-node": "https://github.com/fojas/cleverbot-node.git"
   },
 
   "engines": {
